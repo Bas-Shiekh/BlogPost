@@ -4,7 +4,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import serverError from "./controllers/errors/internalServerError";
 import notFound from "./controllers/errors/notFound";
-import authRouter from "./routes/auth";
+import router from "./routes"
 
 const app = express();
 
@@ -21,7 +21,7 @@ app.use(
   })
 );
 
-app.use("/api/v1", authRouter);
+app.use("/api/v1", router);
 
 app.set("port", 8080);
 

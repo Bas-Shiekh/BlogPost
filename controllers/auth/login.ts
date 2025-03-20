@@ -35,7 +35,6 @@ const loginController = async (
       data: userData,
     });
   } catch (error) {
-    console.log(error);
     if (error.name === "ValidationError")
       next(new CustomError(400, error.details[0].message));
     else next(error);
