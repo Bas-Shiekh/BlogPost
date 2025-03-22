@@ -7,18 +7,14 @@ const userAuthentication = async (
   response: Response,
   next: NextFunction
 ) => {
-  try {
-    const { token } = request.cookies;
+  const { token } = request.cookies;
 
-    if (!token) throw new CustomError(401, "Unauthenticated");
+  if (!token) throw new CustomError(401, "Unauthenticated");
 
-    const user = await verifyToken(token);
+  const user = await verifyToken(token);
 
-    request.user = user;
-    next();
-  } catch (error) {
-    next(new CustomError(401, "Unauthenticated"));
-  }
+  request.user = user;
+  next();
 };
 
 export default userAuthentication;

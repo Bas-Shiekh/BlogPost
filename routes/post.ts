@@ -8,16 +8,17 @@ import {
   deletePost,
 } from "../controllers/post";
 import userAuthentication from "../middlewares/useAuth";
+import expressWrapper from "../utils/expressWrapper";
 
 const postRouter = Router();
 
 // Public routes
-postRouter.get("/", getAllPosts);
-postRouter.get("/:id", getPostById);
+postRouter.get("", expressWrapper(getAllPosts));
+postRouter.get("/:id", expressWrapper(getPostById));
 
 // Protected routes (require authentication)
-postRouter.post("/", userAuthentication, createPost);
-postRouter.put("/:id", userAuthentication, updatePost);
-postRouter.delete("/:id", userAuthentication, deletePost);
+postRouter.post("/", expressWrapper(userAuthentication), expressWrapper(createPost));
+postRouter.put("/:id", expressWrapper(userAuthentication), expressWrapper(updatePost));
+postRouter.delete("/:id", expressWrapper(userAuthentication), expressWrapper(deletePost));
 
 export default postRouter;

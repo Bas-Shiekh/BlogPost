@@ -5,21 +5,22 @@ import {
   signupController,
 } from "../controllers/auth";
 import userAuthentication from "../middlewares/useAuth";
+import expressWrapper from "../utils/expressWrapper";
 
 const authRouter = Router();
 
-authRouter.post("/login", loginController);
+authRouter.post("/login", expressWrapper(loginController));
 
-authRouter.post("/signup", signupController);
+authRouter.post("/signup", expressWrapper(signupController));
 
-authRouter.post("/logout", logoutController);
+authRouter.post("/logout", expressWrapper(logoutController));
 
 authRouter.get(
   "/auth",
-  userAuthentication,
-  (request: any, response: Response) => {
+  expressWrapper(userAuthentication),
+  expressWrapper((request: any, response: Response) => {
     response.json({ status: 200, data: request.user });
-  }
+  })
 );
 
 export default authRouter;
