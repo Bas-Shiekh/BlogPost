@@ -5,7 +5,7 @@ const createPostValidation = (body: CreatePostInterface) => {
   const schema = joi.object({
     title: joi.string().required(),
     content: joi.string().required(),
-    authorId: joi.number().required(),
+    published: joi.boolean().required(),
   });
 
   return schema.validateAsync(body);

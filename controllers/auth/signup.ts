@@ -3,44 +3,37 @@ import { signupValidation } from "../../validation";
 import { hash } from "bcryptjs";
 import CustomError from "../../utils/CustomError";
 import { signToken } from "../../utils/jwt";
-import { createUserQuery, findUserQuery } from "../../queries/auth";
+import { createUserQuery, findUserQuery } from "../../database/queries/auth";
 
-const signupController = async (
-  request: Request,
-  response: Response,
-  next: NextFunction
-) => {
-  try {
-    const { name, email, password, confirmationPassword } = request.body;
-    await signupValidation({ name, email, password, confirmationPassword });
-    const doesUserExist = await findUserQuery(email);
-    if (doesUserExist) throw new CustomError(422, "Email does already exists");
+const signupController = async( request: Request, response: Response, next: NextFunction) => 
+	{
+		try {
+					// Data validation
+					const { name, email, password, confirmationPassword } = request.body;
+					await signupValidation({ name, email, password, confirmationPassword });
 
-    const hashedPassword = await hash(password, 12);
+					// Check if user already exists
+					const doesUserExist = await findUserQuery(email);
+					if (doesUserExist) throw new CustomError(422, "Email does already exists");
 
-    const userData = await createUserQuery({
-      name,
-      email,
-      password: hashedPassword,
-    });
+					// Hash password
+					const hashedPassword = await hash(password, 12);
 
-    const token = await signToken({
-      id: userData.id,
-      name: userData.name,
-      email: userData.email,
-    });
+					// Create user
+					const userInfo = await createUserQuery({ name, email, password: hashedPassword });
 
-    response.cookie("token", token).status(200).json({
-      status: 200,
-      message: "User was created successfully",
-      data: userData,
-    });
+					// Generate a JWT token with the user details
+					const token = await signToken(userInfo);
+
+					// Send response
+					response.cookie("token", token).status(200).json({status: 200, message: "User was created successfully", userInfo});
   } catch (error) {
+    // Handle validation errors
     if (error.name === "ValidationError")
       next(new CustomError(400, error.details[0].message));
+    // Handle other errors
     else next(error);
   }
 };
 
-244088;
 export default signupController;

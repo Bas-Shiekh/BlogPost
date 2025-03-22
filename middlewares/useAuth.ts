@@ -1,10 +1,9 @@
 import { NextFunction, Response } from "express";
 import CustomError from "../utils/CustomError";
 import { verifyToken } from "../utils/jwt";
-import { CustomRequest } from "../interfaces";
 
 const userAuthentication = async (
-  request: CustomRequest,
+  request: any,
   response: Response,
   next: NextFunction
 ) => {
@@ -14,7 +13,8 @@ const userAuthentication = async (
     if (!token) throw new CustomError(401, "Unauthenticated");
 
     const user = await verifyToken(token);
-    if (user) request.user = user;
+
+    request.user = user;
     next();
   } catch (error) {
     next(new CustomError(401, "Unauthenticated"));

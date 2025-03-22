@@ -3,8 +3,8 @@ import {
   logoutController,
   loginController,
   signupController,
-} from "../../controllers/auth";
-import userAuthentication from "../../middlewares/useAuth";
+} from "../controllers/auth";
+import userAuthentication from "../middlewares/useAuth";
 
 const authRouter = Router();
 
