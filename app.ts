@@ -2,10 +2,11 @@ import express from "express";
 import compression from "compression";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import serverError from "./controllers/errors/internalServerError";
-import notFound from "./controllers/errors/notFound";
+import serverError from "./utils/errors/internalServerError";
+import notFound from "./utils/errors/notFound";
 import authRouter from "./routes/auth";
-
+import postRouter from "./routes/post";
+import commentRouter from "./routes/comments";
 const app = express();
 
 app.use(cookieParser());
@@ -22,8 +23,9 @@ app.use(
 );
 
 app.use("/api/v1", authRouter);
-
-app.set("port", 8080);
+app.use("/api/v1/posts", postRouter);
+app.use("/api/v1/comments", commentRouter);
+app.set("port", 8000);
 
 app.use(serverError);
 app.use(notFound);
