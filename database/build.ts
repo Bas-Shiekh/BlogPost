@@ -14,7 +14,6 @@ const resetDatabase = async () => {
 
 const applyMigrations = async () => {
   console.log("Applying migrations...");
-  await prisma.$executeRaw`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
   await prisma.$executeRaw`SET search_path TO public`;
   await prisma.$executeRaw`ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO PUBLIC`;
   await prisma.$executeRaw`ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO PUBLIC`;
