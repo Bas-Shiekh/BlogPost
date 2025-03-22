@@ -1,6 +1,6 @@
 import prisma from "../connection"; // Your Prisma client instance
 import { PostQuery } from "../../interfaces";
-export const createPostQuery = async (data: {
+export const  createPostQuery = async (data: {
   title: string;
   content?: string;
   published?: boolean;

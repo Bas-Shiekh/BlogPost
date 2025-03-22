@@ -34,8 +34,7 @@ export interface CreatePostInterface {
 
 // Extend Express Request to include an optional `user` and a generic body type
 export interface IRequest<T = any> extends Request {
-  user?: PayloadInterface;
-  body: T;
+  user: PayloadInterface;
 }
 
 export interface UpdatePostInterface {

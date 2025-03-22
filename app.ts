@@ -4,9 +4,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import serverError from "./utils/errors/internalServerError";
 import notFound from "./utils/errors/notFound";
-import authRouter from "./routes/auth";
-import postRouter from "./routes/post";
-import commentRouter from "./routes/comments";
+import router from "./routes";
 const app = express();
 
 app.use(cookieParser());
@@ -22,9 +20,8 @@ app.use(
   })
 );
 
-app.use("/api/v1", authRouter);
-app.use("/api/v1/posts", postRouter);
-app.use("/api/v1/comments", commentRouter);
+app.use("/api/v1", router);
+
 app.set("port", 8000);
 
 app.use(serverError);
