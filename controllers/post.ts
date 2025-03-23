@@ -8,6 +8,7 @@ import {
   deletePostQuery,
 } from "../database/queries/post";
 import { CreatePostInterface, IRequest } from "../interfaces";
+import { createPostValidation } from "../validation";
 
 export const createPost = async (
   request: IRequest<CreatePostInterface>,
@@ -15,6 +16,12 @@ export const createPost = async (
 ) => {
   const { title, content, published } = request.body;
   const userId = request.user.id;
+  await createPostValidation({
+    title,
+    content,
+    published,
+    authorId: userId,
+  });
 
   const newPost = await createPostQuery({
     title,

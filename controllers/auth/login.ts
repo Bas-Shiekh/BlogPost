@@ -29,9 +29,8 @@ const loginController = async (
 
   // Send response
   response
-    .cookie("token", token, { httpOnly: true })
     .status(200)
-    .json({ status: 200, message: "You logged in successfully", userInfo });
+    .json({ status: 200, message: "You logged in successfully", userInfo, token });
 };
 
 export default loginController;

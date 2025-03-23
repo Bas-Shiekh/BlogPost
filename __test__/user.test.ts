@@ -23,7 +23,7 @@ describe("Validations tests should return errors messages to the user", () => {
   test("when user not enters email", async () => {
     await request(app)
       .post("/api/v1/signup")
-      .send({name: "basil alsheikh"})
+      .send({ name: "basil alsheikh" })
       .expect(422)
       .expect((response) => {
         expect(response.body.message).toEqual("Email is required");
@@ -53,7 +53,11 @@ describe("Validations tests should return errors messages to the user", () => {
   test("when user enters data with less than 5 characters password", async () => {
     await request(app)
       .post("/api/v1/signup")
-      .send({ name: "basil alsheikh", email: "basilelshakhe@gmail.com", password: "bas" })
+      .send({
+        name: "basil alsheikh",
+        email: "basilelshakhe@gmail.com",
+        password: "bas",
+      })
       .expect(422)
       .expect((response) => {
         expect(response.body.message).toEqual(
@@ -101,7 +105,7 @@ describe("Validations tests should return errors messages to the user", () => {
         name: "basil alsheikh",
         email: "basilelshakhe@gmail.com",
         password: "basil",
-        confirmationPassword: "basil100"
+        confirmationPassword: "basil100",
       })
       .expect(422)
       .expect((response) => {
@@ -120,9 +124,7 @@ describe("Validations tests should return errors messages to the user", () => {
       })
       .expect(422)
       .expect((response) => {
-        expect(response.body.message).toEqual(
-          "Email is required"
-        );
+        expect(response.body.message).toEqual("Email is required");
       });
   });
 
@@ -168,10 +170,7 @@ describe("Validations tests should return errors messages to the user", () => {
   test("when not has a token in cookies", async () => {
     await request(app)
       .get("/api/v1/auth")
-      .set(
-        "Cookie",
-        `token=`
-      )
+      .set("Cookie", `token=`)
       .expect(401)
       .expect((response) => {
         expect(response.body.message).toEqual("Unauthenticated");
@@ -182,8 +181,8 @@ describe("Validations tests should return errors messages to the user", () => {
     await request(app)
       .get("/api/v1/auth")
       .set(
-        "Cookie",
-        `token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJiYXNpZWxzaGFraGVAZ21haWwuY29tIiwibmFtZSI6ImJhc2lsIGFsc2hlaWtoIiwicGFzc3dvcmQiOiIkMmIkMTIkUFFoV0EuZjUvU2d5R041TUQxTGdvT3JPVllXY1c4S1RlZEpHNGdZRUVWSHN1blV6OU9ReGUiLCJpYXQiOjE3NDI2MzcxMzd9.5yXqFnkZgeP8pb3GsoUsWgvcI9cMArbntdjppeRmS3As`
+        "Authorization",
+        `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJiYXNpZWxzaGFraGVAZ21haWwuY29tIiwibmFtZSI6ImJhc2lsIGFsc2hlaWtoIiwicGFzc3dvcmQiOiIkMmIkMTIkUFFoV0EuZjUvU2d5R041TUQxTGdvT3JPVllXY1c4S1RlZEpHNGdZRUVWSHN1blV6OU9ReGUiLCJpYXQiOjE3NDI2MzcxMzd9.5yXqFnkZgeP8pb3GsoUsWgvcI9cMArbntdjppeRmS3As`
       )
       .expect(401)
       .expect((response) => {
@@ -193,11 +192,11 @@ describe("Validations tests should return errors messages to the user", () => {
 
   test("when user logout", async () => {
     await request(app)
-        .post("/api/v1/logout")
-        .expect(200)
-        .expect((res) => {
-          expect(res.body.message).toEqual("Logged out successfully");
-        });
+      .post("/api/v1/logout")
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.message).toEqual("Logged out successfully");
+      });
   });
 });
 
