@@ -15,7 +15,9 @@ const expressWrapper =
         error.status = 401;
         error.message = "Unauthorized: No user provided";
       }
-      next(new CustomError(error.status, "Internal server error"));
+      if (error.status !== 500)
+        next(new CustomError(error.status, error.message));
+      else next(new CustomError(error.status, error.message))
     }
   };
 
