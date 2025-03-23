@@ -4,14 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development nodemon index.ts",
+    "dev": "cross-env NODE_ENV=development nodemon ./server/index.ts",
     "start": "cross-env NODE_ENV=production ts-node ./server/index.ts",
-    "test": "cross-env NODE_ENV=test jest --runInBand",
-    "db:migrate": "prisma migrate dev --schema=./database/prisma/schema.prisma",
-    "db:generate": "prisma generate --schema=./database/prisma/schema.prisma",
-    "db:push": "prisma db push --schema=./database/prisma/schema.prisma",
-    "db:studio": "prisma studio --schema=./database/prisma/schema.prisma",
-    "db:reset": "prisma migrate reset --schema=./database/prisma/schema.prisma"
+    "test": "cross-env NODE_ENV=test jest --runInBand ./server",
+    "db:migrate": "prisma migrate dev --schema=./server/database/prisma/schema.prisma",
+    "db:generate": "prisma generate --schema=./server/database/prisma/schema.prisma",
+    "db:push": "prisma db push --schema=./server/database/prisma/schema.prisma",
+    "db:studio": "prisma studio --schema=./server/database/prisma/schema.prisma",
+    "db:reset": "prisma migrate reset --schema=./server/database/prisma/schema.prisma"
   },
   "author": "",
   "license": "ISC",

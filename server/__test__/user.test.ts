@@ -159,7 +159,7 @@ describe("Validations tests should return errors messages to the user", () => {
       .post("/api/v1/login")
       .send({
         email: "basilelshakhe@gmail.com",
-        password: "basil",
+        password: "basil200000",
       })
       .expect(400)
       .expect((response) => {
