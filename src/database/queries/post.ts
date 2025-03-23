@@ -27,7 +27,22 @@ export const getAllPostsQuery = async (query: PostQuery) => {
     },
     // Include the related author in the result so you can see the author details
     include: {
-      author: true,
+      author: {
+        select: { id: true, name: true, email: true}
+      },
+      comments: {
+        select: {
+          id: true,
+          content: true,
+          createdAt: true,
+          author: {
+            select: {
+              id: true,
+              name: true,
+            },
+          }
+        }
+      }
     },
   });
 };
@@ -35,7 +50,24 @@ export const getAllPostsQuery = async (query: PostQuery) => {
 export const getPostByIdQuery = async (id: number) => {
   return prisma.post.findUnique({
     where: { id },
-    include: { author: true },
+    include: {
+      author: {
+        select: { id: true, name: true, email: true },
+      },
+      comments: {
+        select: {
+          id: true,
+          content: true,
+          createdAt: true,
+          author: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+      },
+    },
   });
 };
 
