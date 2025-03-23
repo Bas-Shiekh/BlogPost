@@ -7,7 +7,7 @@ const userAuthentication = async (
   response: Response,
   next: NextFunction
 ) => {
-  const { token } = request.cookies;
+  const token = request.headers.authorization?.split(" ")[1];
 
   if (!token) throw new CustomError(401, "Unauthenticated");
 

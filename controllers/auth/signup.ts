@@ -29,9 +29,8 @@ const signupController = async (request: Request, response: Response) => {
 
   // Send response
   response
-    .cookie("token", token)
     .status(200)
-    .json({ status: 200, message: "User was created successfully", userInfo });
+    .json({ status: 200, message: "User was created successfully", userInfo, token });
 };
 
 export default signupController;

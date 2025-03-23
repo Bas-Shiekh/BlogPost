@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon index.ts",
     "start": "cross-env NODE_ENV=production ts-node ./server/index.ts",
-    "test": "cross-env NODE_ENV=test jest --runInBand server/__test__/",
+    "test": "cross-env NODE_ENV=test jest --runInBand",
     "db:migrate": "prisma migrate dev --schema=./database/prisma/schema.prisma",
     "db:generate": "prisma generate --schema=./database/prisma/schema.prisma",
     "db:push": "prisma db push --schema=./database/prisma/schema.prisma",
@@ -42,6 +42,8 @@
     "@types/jest": "^29.5.14",
     "@types/joi": "^17.2.2",
     "@types/jsonwebtoken": "^9.0.9",
+    "@types/supertest": "^6.0.2",
+    "supertest": "^7.1.0",
     "ts-jest": "^29.2.6"
   }
 }
