@@ -15,14 +15,14 @@ app.disable("x-powered-by");
 
 app.use(
   cors({
-    origin: "*",
+    origin: ["*", "http://localhost:3000/"],
     credentials: true,
   })
 );
 
 app.use("/api/v1", router);
 
-app.set("port", 8000);
+app.set("port", 8080);
 
 app.use(serverError);
 app.use(notFound);
