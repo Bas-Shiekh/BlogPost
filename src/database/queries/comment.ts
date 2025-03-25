@@ -12,6 +12,13 @@ export const getCommentsByPostQuery = async (postId: number) => {
     orderBy: {
       createdAt: "asc",
     },
+    include: {
+      author: {
+        select: {
+          name: true, // Only fetch the author's name
+        },
+      },
+    },
   });
 };
 
