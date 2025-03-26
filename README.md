@@ -100,5 +100,5 @@ For a complete list of API endpoints, refer to the API documentation.
 
 For any questions or feedback, feel free to reach out:
 
-- GitHub: [your-username](https://github.com/Bas-Shiekh)
-- Email: [your-email@example.com](mailto\:basilelshakhe@gmail.com)
+- GitHub: [Bas-Shiekh](https://github.com/Bas-Shiekh)
+- Email: [basilelshakhe@gmail.com](mailto\:basilelshakhe@gmail.com)
