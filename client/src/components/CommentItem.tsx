@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect } from "react";
 import { useAuth } from "../hooks";
 import type { Comment } from "../lib/types";
@@ -19,47 +21,43 @@ import {
 import { Alert, AlertDescription } from "./ui/Alert";
 
 interface CommentItemProps {
-  comment?: Comment;
-  onUpdate: (commentId?: string, content?: string) => Promise<any>;
-  onDelete: (commentId?: string) => Promise<any>;
+  comment: Comment;
+  onUpdate: (commentId: string, content: string) => Promise<any>;
+  onDelete: (commentId: string) => Promise<any>;
 }
 
-const CommentItem = ({
-  comment,
-  onUpdate,
-  onDelete,
-}: CommentItemProps) => {
+const CommentItem = ({ comment, onUpdate, onDelete }: CommentItemProps) => {
   const { user } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
-  const [editedContent, setEditedContent] = useState(comment?.content);
+  const [editedContent, setEditedContent] = useState(comment.content);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isUpdating, setIsUpdating] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [displayName, setDisplayName] = useState(
-    comment?.author.name || "Anonymous"
+    comment.author.name || "Anonymous"
   );
 
   // Effect to update display name if it's the current user's comment
   useEffect(() => {
     // If the comment has no author name but belongs to the current user
     if (
-      (!comment?.author.name || comment.author.name === "") &&
-      user?.id === Number(comment?.author.id)
+      (!comment.author.name || comment.author.name === "") &&
+      user?.id === Number(comment.author.id)
     ) {
       setDisplayName(user.name);
-    } else if (comment?.author.name) {
+    } else if (comment.author.name) {
       setDisplayName(comment.author.name);
     }
   }, [comment, user]);
 
   // Check if the current user is the author of the comment
-  const isAuthor = user?.id === Number(comment?.author.id);
+  const isAuthor = user?.id === Number(comment.author.id);
 
   const validateComment = () => {
     setError(null);
 
-    if (!editedContent?.trim()) {
+    if (!editedContent.trim()) {
       setError("Comment cannot be empty");
       return false;
     }
@@ -74,7 +72,7 @@ const CommentItem = ({
 
   const handleUpdate = async () => {
     // Skip update if content hasn't changed
-    if (editedContent?.trim() === comment?.content) {
+    if (editedContent.trim() === comment.content) {
       setIsEditing(false);
       return;
     }
@@ -83,10 +81,11 @@ const CommentItem = ({
 
     try {
       setIsUpdating(true);
-      await onUpdate(comment ? comment.id : '', editedContent);
+      await onUpdate(comment.id, editedContent);
       setIsEditing(false);
       setError(null);
     } catch (error: any) {
+      console.error("Error updating comment:", error);
       setError(error || "Failed to update comment. Please try again.");
     } finally {
       setIsUpdating(false);
@@ -98,7 +97,7 @@ const CommentItem = ({
 
     try {
       setIsDeleting(true);
-      await onDelete(comment?.id);
+      await onDelete(comment.id);
       setShowDeleteDialog(false);
     } catch (error: any) {
       console.error("Error deleting comment:", error);
@@ -111,15 +110,20 @@ const CommentItem = ({
   return (
     <div className="flex gap-4">
       <Avatar>
-        <AvatarImage src={comment?.author.avatar} alt={displayName} />
-        <AvatarFallback>{displayName.charAt(0) || "?"}</AvatarFallback>
+        {comment.author.avatar ? (
+          <AvatarImage src={comment.author.avatar} alt={displayName} />
+        ) : (
+          <AvatarFallback>
+            {displayName.slice(0, 2).toUpperCase() || "??"}
+          </AvatarFallback>
+        )}
       </Avatar>
       <div className="flex-1">
         <div className="flex items-center justify-between mb-1">
           <div className="flex items-center gap-2">
             <span className="font-medium">{displayName}</span>
             <span className="text-sm text-muted-foreground">
-              {formatDate(comment ? comment?.createdAt : '')}
+              {formatDate(comment.createdAt)}
             </span>
           </div>
 
@@ -164,7 +168,7 @@ const CommentItem = ({
                 size="sm"
                 onClick={() => {
                   setIsEditing(false);
-                  setEditedContent(comment?.content);
+                  setEditedContent(comment.content);
                   setError(null);
                 }}
                 disabled={isUpdating}
@@ -177,7 +181,7 @@ const CommentItem = ({
             </div>
           </div>
         ) : (
-          <p className="text-sm">{comment?.content}</p>
+          <p className="text-sm">{comment.content}</p>
         )}
       </div>
 
@@ -214,6 +218,6 @@ const CommentItem = ({
       </AlertDialog>
     </div>
   );
-}
+};
 
-export default CommentItem
+export default CommentItem;

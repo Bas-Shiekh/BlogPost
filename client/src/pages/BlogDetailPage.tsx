@@ -1,3 +1,7 @@
+"use client";
+
+import type React from "react";
+
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../hooks";
@@ -38,9 +42,10 @@ const BlogDetailPage = () => {
   const dispatch = useAppDispatch();
 
   // Get state from Redux
-  const { currentBlog, error: blogError } = useAppSelector(
-    (state) => state.blogs
-  );
+  const {
+    currentBlog,
+    error: blogError,
+  } = useAppSelector((state) => state.blogs);
   const { comments, isLoading: isCommentsLoading } = useAppSelector(
     (state) => state.comments
   );
@@ -200,11 +205,14 @@ const BlogDetailPage = () => {
 
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <Avatar className="h-8 w-8">
+            {currentBlog.author.avatar ?
             <AvatarImage
               src={currentBlog.author.avatar}
               alt={currentBlog.author.name}
-            />
-            <AvatarFallback>{currentBlog.author.name.charAt(0)}</AvatarFallback>
+            /> :
+            <AvatarFallback>
+              {currentBlog.author.name.slice(0, 2).toUpperCase()}
+            </AvatarFallback>}
           </Avatar>
           <span>{currentBlog.author.name}</span>
           <span>•</span>
@@ -218,7 +226,9 @@ const BlogDetailPage = () => {
       </article>
 
       <div className="border-t pt-8">
-        <h2 className="text-2xl font-bold mb-6">Comments</h2>
+        <h2 className="text-2xl font-bold mb-6">
+          Comments ({comments.length})
+        </h2>
 
         {isAuthenticated ? (
           <form onSubmit={handleSubmitComment} className="mb-8">
@@ -276,10 +286,12 @@ const BlogDetailPage = () => {
                   key={comment.id}
                   comment={comment}
                   onUpdate={(commentId, content) => {
-                    return dispatch(updateComment({ commentId, content }));
+                    return dispatch(
+                      updateComment({ commentId, content })
+                    ).unwrap();
                   }}
                   onDelete={(commentId) => {
-                    return dispatch(deleteComment(commentId));
+                    return dispatch(deleteComment(commentId)).unwrap();
                   }}
                 />
               ))

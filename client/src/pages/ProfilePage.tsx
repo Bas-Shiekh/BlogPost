@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks";
@@ -33,10 +35,13 @@ const ProfilePage = () => {
         <CardContent className="space-y-6">
           <div className="flex items-center gap-4">
             <Avatar className="h-20 w-20">
-              <AvatarImage src={user.avatar} alt={user.name} />
-              <AvatarFallback className="text-2xl">
-                {user.name.charAt(0)}
-              </AvatarFallback>
+              {user.avatar ? (
+                <AvatarImage src={user.avatar} alt={user.name} />
+              ) : (
+                <AvatarFallback className="text-2xl">
+                  {user.name.slice(0, 2).toUpperCase()}
+                </AvatarFallback>
+              )}
             </Avatar>
             <div>
               <h2 className="text-2xl font-bold">{user.name}</h2>

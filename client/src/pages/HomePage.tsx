@@ -2,12 +2,13 @@
 
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useBlog } from "../hooks";
+import { useAuth, useBlog } from "../hooks";
 import { Button } from "../components/ui/Button";
 import BlogList from "../components/BlogList";
 
 const HomePage = () => {
   const { blogs, isLoading, fetchBlogs } = useBlog();
+  const { isAuthenticated } = useAuth();
 
   useEffect(() => {
     // Immediately invoke the function to fetch blogs
@@ -34,9 +35,11 @@ const HomePage = () => {
           <Button asChild size="lg">
             <Link to="/blogs">Browse Blogs</Link>
           </Button>
-          <Button asChild variant="outline" size="lg">
-            <Link to="/auth/login">Get Started</Link>
-          </Button>
+          {!isAuthenticated && (
+            <Button asChild variant="outline" size="lg">
+              <Link to="/auth/login">Get Started</Link>
+            </Button>
+          )}
         </div>
       </section>
 

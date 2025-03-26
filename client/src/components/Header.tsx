@@ -55,8 +55,13 @@ const Header = () => {
                 className="relative h-8 w-8 rounded-full p-0"
               >
                 <Avatar className="h-8 w-8">
-                  <AvatarImage src={user?.avatar} alt={user?.name} />
-                  <AvatarFallback>{user?.name?.charAt(0)}</AvatarFallback>
+                  {user?.avatar ? (
+                    <AvatarImage src={user?.avatar} alt={user?.name} />
+                  ) : (
+                    <AvatarFallback>
+                      {user?.name?.slice(0, 2).toUpperCase()}
+                    </AvatarFallback>
+                  )}
                 </Avatar>
               </Button>
               <div className="absolute right-0 mt-2 w-56 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
@@ -105,6 +110,6 @@ const Header = () => {
       </div>
     </header>
   );
-}
+};
 
 export default Header;
