@@ -15,7 +15,7 @@ interface BlogListProps {
   limit?: number
 }
 
-export default function BlogList({ blogs, isLoading, limit }: BlogListProps) {
+const BlogList = ({ blogs, isLoading, limit }: BlogListProps) => {
   // Show skeleton loading state
   if (isLoading) {
     return (
@@ -79,3 +79,4 @@ export default function BlogList({ blogs, isLoading, limit }: BlogListProps) {
   )
 }
 
+export default BlogList

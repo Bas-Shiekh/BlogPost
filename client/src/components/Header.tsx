@@ -10,7 +10,7 @@ import ThemeToggle from "./ThemeToggle";
 /**
  * Header component with navigation and user menu
  */
-export default function Header() {
+const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
@@ -106,3 +106,5 @@ export default function Header() {
     </header>
   );
 }
+
+export default Header;

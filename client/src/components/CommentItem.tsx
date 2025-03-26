@@ -24,11 +24,11 @@ interface CommentItemProps {
   onDelete: (commentId?: string) => Promise<any>;
 }
 
-export default function CommentItem({
+const CommentItem = ({
   comment,
   onUpdate,
   onDelete,
-}: CommentItemProps) {
+}: CommentItemProps) => {
   const { user } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState(comment?.content);
@@ -87,7 +87,6 @@ export default function CommentItem({
       setIsEditing(false);
       setError(null);
     } catch (error: any) {
-      console.error("Error updating comment:", error);
       setError(error || "Failed to update comment. Please try again.");
     } finally {
       setIsUpdating(false);
@@ -216,3 +215,5 @@ export default function CommentItem({
     </div>
   );
 }
+
+export default CommentItem

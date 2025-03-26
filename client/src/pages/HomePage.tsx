@@ -6,7 +6,7 @@ import { useBlog } from "../hooks";
 import { Button } from "../components/ui/Button";
 import BlogList from "../components/BlogList";
 
-export default function HomePage() {
+const HomePage = () => {
   const { blogs, isLoading, fetchBlogs } = useBlog();
 
   useEffect(() => {
@@ -51,4 +51,6 @@ export default function HomePage() {
       </section>
     </div>
   );
-}
+};
+
+export default HomePage;

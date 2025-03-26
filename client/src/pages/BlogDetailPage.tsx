@@ -1,5 +1,3 @@
-import type React from "react";
-
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../hooks";
@@ -34,16 +32,15 @@ import {
 } from "../components/ui/AlertDialog";
 import { Alert, AlertDescription } from "../components/ui/Alert";
 
-export default function BlogDetailPage() {
+const BlogDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   // Get state from Redux
-  const {
-    currentBlog,
-    error: blogError,
-  } = useAppSelector((state) => state.blogs);
+  const { currentBlog, error: blogError } = useAppSelector(
+    (state) => state.blogs
+  );
   const { comments, isLoading: isCommentsLoading } = useAppSelector(
     (state) => state.comments
   );
@@ -324,4 +321,6 @@ export default function BlogDetailPage() {
       </AlertDialog>
     </div>
   );
-}
+};
+
+export default BlogDetailPage;

@@ -1,14 +1,13 @@
-import type React from "react"
-import Header from "./Header"
+import Header from "./Header";
 
 /**
  * Layout component for consistent page structure
  */
 interface LayoutProps {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
-export default function Layout({ children }: LayoutProps) {
+const Layout = ({ children }: LayoutProps) => {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -19,6 +18,7 @@ export default function Layout({ children }: LayoutProps) {
         </div>
       </footer>
     </div>
-  )
-}
+  );
+};
 
+export default Layout;

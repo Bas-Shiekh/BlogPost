@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks";
@@ -11,7 +9,7 @@ import {
 } from "../components/ui/Card";
 import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/Avatar";
 
-export default function ProfilePage() {
+const ProfilePage = () => {
   const navigate = useNavigate();
   const { user, isAuthenticated } = useAuth();
 
@@ -49,4 +47,6 @@ export default function ProfilePage() {
       </Card>
     </div>
   );
-}
+};
+
+export default ProfilePage;

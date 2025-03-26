@@ -20,7 +20,7 @@ import { Textarea } from "../components/ui/Textarea";
 import { Alert, AlertDescription } from "../components/ui/Alert";
 import { AlertCircle } from "lucide-react";
 
-export default function NewBlogPage() {
+const NewBlogPage = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -165,4 +165,6 @@ export default function NewBlogPage() {
       </Card>
     </div>
   );
-}
+};
+
+export default NewBlogPage;

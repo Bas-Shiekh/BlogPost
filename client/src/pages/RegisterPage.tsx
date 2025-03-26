@@ -1,7 +1,3 @@
-"use client";
-
-import type React from "react";
-
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks";
@@ -19,7 +15,7 @@ import { Label } from "../components/ui/Label";
 import { Alert, AlertDescription } from "../components/ui/Alert";
 import { AlertCircle } from "lucide-react";
 
-export default function RegisterPage() {
+const RegisterPage = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -197,4 +193,6 @@ export default function RegisterPage() {
       </Card>
     </div>
   );
-}
+};
+
+export default RegisterPage;

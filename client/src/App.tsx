@@ -19,7 +19,7 @@ import { Toaster } from "./components/ui/Toaster";
 /**
  * Main App component
  */
-function App() {
+const App = () => {
   const dispatch = useAppDispatch();
   const { theme } = useAppSelector((state: RootState) => state.theme);
 
