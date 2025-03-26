@@ -9,7 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/Avatar";
 import { Skeleton } from "./ui/Skeleton";
 import { Link } from "react-router-dom";
 import { formatDate } from "../lib/utils";
-import { MessageSquare } from "lucide-react";
+import { MessageSquare, Clock } from "lucide-react";
 import type { Blog } from "../lib/types";
 
 /**
@@ -22,11 +22,9 @@ interface BlogListProps {
 }
 
 const BlogList = ({ blogs, isLoading, limit }: BlogListProps) => {
-  console.log("BlogList render - blogs:", blogs, "isLoading:", isLoading);
 
   // Show skeleton loading state
   if (isLoading) {
-    console.log("BlogList showing loading skeletons");
     return (
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {[...Array(limit || 6)].map((_, i) => (
@@ -48,15 +46,12 @@ const BlogList = ({ blogs, isLoading, limit }: BlogListProps) => {
 
   // Show message when no blogs are found
   if (!blogs || blogs.length === 0) {
-    console.log("BlogList showing no blogs found message");
     return (
       <div className="text-center py-12">
         <p className="text-muted-foreground">No blogs found</p>
       </div>
     );
   }
-
-  console.log("BlogList rendering blogs:", blogs.length);
 
   // Render the blog grid
   return (
@@ -66,17 +61,14 @@ const BlogList = ({ blogs, isLoading, limit }: BlogListProps) => {
           <Card className="h-full overflow-hidden hover:shadow-md transition-shadow">
             <CardHeader>
               <div className="flex items-center gap-2">
-                <Avatar className="h-8 w-8">
-                  {blog.author.avatar ? (
-                    <AvatarImage
-                      src={blog.author.avatar}
-                      alt={blog.author.name}
-                    />
-                  ) : (
-                    <AvatarFallback>
-                      {blog.author.name.slice(0, 2).toUpperCase()}
-                    </AvatarFallback>
-                  )}
+                <Avatar className="h-6 w-6">
+                  <AvatarImage
+                    src={blog.author.avatar}
+                    alt={blog.author.name}
+                  />
+                  <AvatarFallback>
+                    {blog.author.name.slice(0, 2)}
+                  </AvatarFallback>
                 </Avatar>
                 <span className="text-sm text-muted-foreground">
                   {blog.author.name}
@@ -90,7 +82,20 @@ const BlogList = ({ blogs, isLoading, limit }: BlogListProps) => {
               </p>
             </CardContent>
             <CardFooter className="text-sm text-muted-foreground flex justify-between">
-              <span>{formatDate(blog.createdAt)}</span>
+              <div className="flex items-center gap-1">
+                <Clock className="h-4 w-4" />
+                <span title={`Created: ${formatDate(blog.createdAt)}`}>
+                  {formatDate(blog.createdAt)}
+                </span>
+                {blog.updatedAt && blog.updatedAt !== blog.createdAt && (
+                  <span
+                    className="text-xs ml-1"
+                    title={`Updated: ${formatDate(blog.updatedAt)}`}
+                  >
+                    (updated)
+                  </span>
+                )}
+              </div>
               <div className="flex items-center gap-1">
                 <MessageSquare className="h-4 w-4" />
                 <span>{blog.commentCount}</span>
@@ -101,6 +106,6 @@ const BlogList = ({ blogs, isLoading, limit }: BlogListProps) => {
       ))}
     </div>
   );
-};
+}
 
 export default BlogList;

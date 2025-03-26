@@ -15,6 +15,7 @@ export interface Blog {
   content: string;
   excerpt: string;
   createdAt: string;
+  updatedAt: string;
   author: {
     id: string;
     name: string;
@@ -22,7 +23,7 @@ export interface Blog {
   };
   commentCount: number;
   comments?: {
-    author: { id: number; name: string};
+    author: { id: number; name: string };
     id: number;
     createdAt: string;
     content: string;
