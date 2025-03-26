@@ -1,3 +1,5 @@
+"use client";
+
 import type React from "react";
 
 import { useEffect, useState } from "react";
@@ -34,7 +36,7 @@ import {
 } from "../components/ui/AlertDialog";
 import { Alert, AlertDescription } from "../components/ui/Alert";
 
-export default function BlogDetailPage() {
+const BlogDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -203,11 +205,14 @@ export default function BlogDetailPage() {
 
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <Avatar className="h-8 w-8">
+            {currentBlog.author.avatar ?
             <AvatarImage
               src={currentBlog.author.avatar}
               alt={currentBlog.author.name}
-            />
-            <AvatarFallback>{currentBlog.author.name.charAt(0)}</AvatarFallback>
+            /> :
+            <AvatarFallback>
+              {currentBlog.author.name.slice(0, 2).toUpperCase()}
+            </AvatarFallback>}
           </Avatar>
           <span>{currentBlog.author.name}</span>
           <span>•</span>
@@ -221,7 +226,9 @@ export default function BlogDetailPage() {
       </article>
 
       <div className="border-t pt-8">
-        <h2 className="text-2xl font-bold mb-6">Comments</h2>
+        <h2 className="text-2xl font-bold mb-6">
+          Comments ({comments.length})
+        </h2>
 
         {isAuthenticated ? (
           <form onSubmit={handleSubmitComment} className="mb-8">
@@ -279,10 +286,12 @@ export default function BlogDetailPage() {
                   key={comment.id}
                   comment={comment}
                   onUpdate={(commentId, content) => {
-                    return dispatch(updateComment({ commentId, content }));
+                    return dispatch(
+                      updateComment({ commentId, content })
+                    ).unwrap();
                   }}
                   onDelete={(commentId) => {
-                    return dispatch(deleteComment(commentId));
+                    return dispatch(deleteComment(commentId)).unwrap();
                   }}
                 />
               ))
@@ -324,4 +333,6 @@ export default function BlogDetailPage() {
       </AlertDialog>
     </div>
   );
-}
+};
+
+export default BlogDetailPage;

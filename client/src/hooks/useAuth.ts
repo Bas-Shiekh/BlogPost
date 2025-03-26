@@ -11,7 +11,7 @@ import {
 /**
  * Hook for accessing auth state and actions from Redux
  */
-export function useAuth() {
+export const useAuth = () => {
   const dispatch = useAppDispatch();
   const { user, isAuthenticated, isLoading, error } = useAppSelector(
     (state) => state.auth

@@ -1,7 +1,3 @@
-"use client";
-
-import type React from "react";
-
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useBlog, useAuth } from "../hooks";
@@ -21,7 +17,7 @@ import { Skeleton } from "../components/ui/Skeleton";
 import { Alert, AlertDescription } from "../components/ui/Alert";
 import { AlertCircle } from "lucide-react";
 
-export default function EditBlogPage() {
+const EditBlogPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
@@ -241,4 +237,6 @@ export default function EditBlogPage() {
       </Card>
     </div>
   );
-}
+};
+
+export default EditBlogPage;

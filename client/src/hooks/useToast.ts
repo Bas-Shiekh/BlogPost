@@ -12,7 +12,7 @@ import {
 /**
  * Hook for using toast functionality with Redux
  */
-export function useToast() {
+export const useToast = () => {
   const dispatch = useDispatch();
   const { toasts } = useSelector((state: RootState) => state.toast);
 

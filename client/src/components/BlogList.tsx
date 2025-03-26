@@ -1,23 +1,32 @@
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "./ui/Card"
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/Avatar"
-import { Skeleton } from "./ui/Skeleton"
-import { Link } from "react-router-dom"
-import { formatDate } from "../lib/utils"
-import { MessageSquare } from "lucide-react"
-import type { Blog } from "../lib/types"
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "./ui/Card";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/Avatar";
+import { Skeleton } from "./ui/Skeleton";
+import { Link } from "react-router-dom";
+import { formatDate } from "../lib/utils";
+import { MessageSquare } from "lucide-react";
+import type { Blog } from "../lib/types";
 
 /**
  * Props for the BlogList component
  */
 interface BlogListProps {
-  blogs: Blog[]
-  isLoading: boolean
-  limit?: number
+  blogs: Blog[];
+  isLoading: boolean;
+  limit?: number;
 }
 
-export default function BlogList({ blogs, isLoading, limit }: BlogListProps) {
+const BlogList = ({ blogs, isLoading, limit }: BlogListProps) => {
+  console.log("BlogList render - blogs:", blogs, "isLoading:", isLoading);
+
   // Show skeleton loading state
   if (isLoading) {
+    console.log("BlogList showing loading skeletons");
     return (
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {[...Array(limit || 6)].map((_, i) => (
@@ -34,17 +43,20 @@ export default function BlogList({ blogs, isLoading, limit }: BlogListProps) {
           </Card>
         ))}
       </div>
-    )
+    );
   }
 
   // Show message when no blogs are found
-  if (!blogs.length) {
+  if (!blogs || blogs.length === 0) {
+    console.log("BlogList showing no blogs found message");
     return (
       <div className="text-center py-12">
         <p className="text-muted-foreground">No blogs found</p>
       </div>
-    )
+    );
   }
+
+  console.log("BlogList rendering blogs:", blogs.length);
 
   // Render the blog grid
   return (
@@ -54,16 +66,28 @@ export default function BlogList({ blogs, isLoading, limit }: BlogListProps) {
           <Card className="h-full overflow-hidden hover:shadow-md transition-shadow">
             <CardHeader>
               <div className="flex items-center gap-2">
-                <Avatar className="h-6 w-6">
-                  <AvatarImage src={blog.author.avatar} alt={blog.author.name} />
-                  <AvatarFallback>{blog.author.name.charAt(0)}</AvatarFallback>
+                <Avatar className="h-8 w-8">
+                  {blog.author.avatar ? (
+                    <AvatarImage
+                      src={blog.author.avatar}
+                      alt={blog.author.name}
+                    />
+                  ) : (
+                    <AvatarFallback>
+                      {blog.author.name.slice(0, 2).toUpperCase()}
+                    </AvatarFallback>
+                  )}
                 </Avatar>
-                <span className="text-sm text-muted-foreground">{blog.author.name}</span>
+                <span className="text-sm text-muted-foreground">
+                  {blog.author.name}
+                </span>
               </div>
               <CardTitle className="line-clamp-2">{blog.title}</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-muted-foreground line-clamp-3">{blog.excerpt}</p>
+              <p className="text-muted-foreground line-clamp-3">
+                {blog.excerpt}
+              </p>
             </CardContent>
             <CardFooter className="text-sm text-muted-foreground flex justify-between">
               <span>{formatDate(blog.createdAt)}</span>
@@ -76,6 +100,7 @@ export default function BlogList({ blogs, isLoading, limit }: BlogListProps) {
         </Link>
       ))}
     </div>
-  )
-}
+  );
+};
 
+export default BlogList;

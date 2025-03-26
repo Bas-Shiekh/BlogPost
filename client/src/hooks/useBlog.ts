@@ -14,7 +14,7 @@ import {
 /**
  * Hook for accessing blog state and actions from Redux
  */
-export function useBlog() {
+export const useBlog = () => {
   const dispatch = useAppDispatch();
   const { blogs, currentBlog, isLoading, error } = useAppSelector(
     (state) => state.blogs

@@ -5,6 +5,7 @@ import cors from "cors";
 import serverError from "./utils/errors/internalServerError";
 import notFound from "./utils/errors/notFound";
 import router from "./routes";
+
 const app = express();
 
 app.use(cookieParser());
@@ -22,7 +23,7 @@ app.use(
 
 app.use("/api/v1", router);
 
-app.set("port", 8080);
+app.set("port", process.env.PORT || 8080);
 
 app.use(serverError);
 app.use(notFound);

@@ -11,7 +11,7 @@ import {
 /**
  * Hook for accessing comment state and actions from Redux
  */
-export function useComment() {
+export const useComment = () => {
   const dispatch = useAppDispatch();
   const { comments, isLoading, error } = useAppSelector(
     (state) => state.comments

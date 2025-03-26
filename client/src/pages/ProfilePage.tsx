@@ -11,7 +11,7 @@ import {
 } from "../components/ui/Card";
 import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/Avatar";
 
-export default function ProfilePage() {
+const ProfilePage = () => {
   const navigate = useNavigate();
   const { user, isAuthenticated } = useAuth();
 
@@ -35,10 +35,13 @@ export default function ProfilePage() {
         <CardContent className="space-y-6">
           <div className="flex items-center gap-4">
             <Avatar className="h-20 w-20">
-              <AvatarImage src={user.avatar} alt={user.name} />
-              <AvatarFallback className="text-2xl">
-                {user.name.charAt(0)}
-              </AvatarFallback>
+              {user.avatar ? (
+                <AvatarImage src={user.avatar} alt={user.name} />
+              ) : (
+                <AvatarFallback className="text-2xl">
+                  {user.name.slice(0, 2).toUpperCase()}
+                </AvatarFallback>
+              )}
             </Avatar>
             <div>
               <h2 className="text-2xl font-bold">{user.name}</h2>
@@ -49,4 +52,6 @@ export default function ProfilePage() {
       </Card>
     </div>
   );
-}
+};
+
+export default ProfilePage;

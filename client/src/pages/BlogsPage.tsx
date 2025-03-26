@@ -4,7 +4,7 @@ import { useBlog } from "../hooks";
 import { Button } from "../components/ui/Button";
 import BlogList from "../components/BlogList";
 
-export default function BlogsPage() {
+const BlogsPage = () => {
   const { blogs, isLoading, fetchBlogs } = useBlog();
 
   useEffect(() => {
@@ -31,4 +31,6 @@ export default function BlogsPage() {
       <BlogList blogs={blogs} isLoading={isLoading} />
     </div>
   );
-}
+};
+
+export default BlogsPage;

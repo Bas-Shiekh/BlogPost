@@ -1,7 +1,3 @@
-"use client";
-
-import type React from "react";
-
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../hooks";
@@ -23,7 +19,7 @@ import { AlertCircle } from "lucide-react";
 /**
  * Login page component
  */
-export default function LoginPage() {
+const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -34,8 +30,8 @@ export default function LoginPage() {
 
   useEffect(() => {
     isAuthenticated && navigate("/");
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   /**
    * Handle form submission
@@ -116,4 +112,6 @@ export default function LoginPage() {
       </Card>
     </div>
   );
-}
+};
+
+export default LoginPage;
