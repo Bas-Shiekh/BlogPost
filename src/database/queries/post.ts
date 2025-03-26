@@ -1,13 +1,14 @@
 import prisma from "../connection"; // Your Prisma client instance
 import { PostQuery } from "../../interfaces";
+
 export const  createPostQuery = async (data: {
   title: string;
   content?: string;
-  published?: boolean;
   authorId: number;
 }) => {
   return prisma.post.create({ data });
 };
+
 export const getAllPostsQuery = async (query: PostQuery) => {
   const { search, sortField = "createdAt", sortOrder = "asc" } = query;
 
@@ -74,7 +75,6 @@ export const getPostByIdQuery = async (id: number) => {
 export const updatePostQuery = async (id: number, data: {
   title?: string;
   content?: string;
-  published?: boolean;
 }) => {
   return prisma.post.update({
     where: { id },

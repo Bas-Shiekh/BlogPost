@@ -53,17 +53,6 @@ describe("Validations tests should return errors messages to the user", () => {
       });
   });
 
-  test("when user create a post with title and content", async () => {
-    await request(app)
-      .post("/api/v1/posts/")
-      .set("Authorization", `Bearer ${token}`)
-      .send({ title: "first title from test", content: "first content from test to first post" })
-      .expect(422)
-      .expect((response) => {
-        expect(response.body.message).toEqual("Published status is required");
-      });
-  });
-
   test("when user create a post with valid data", async () => {
     await request(app)
       .post("/api/v1/posts/")
@@ -71,7 +60,6 @@ describe("Validations tests should return errors messages to the user", () => {
       .send({
         title: "first title from test",
         content: "first content from test to first post",
-        published: true,
       })
       .expect(201)
       .expect((response) => {

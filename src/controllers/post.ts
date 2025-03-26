@@ -14,19 +14,17 @@ export const createPost = async (
   request: IRequest<CreatePostInterface>,
   response: Response
 ) => {
-  const { title, content, published } = request.body;
+  const { title, content } = request.body;
   const userId = request.user.id;
   await createPostValidation({
     title,
     content,
-    published,
     authorId: userId,
   });
 
   const newPost = await createPostQuery({
     title,
     content,
-    published,
     authorId: userId,
   });
 
@@ -69,7 +67,7 @@ export const getPostById = async (request: IRequest, response: Response) => {
 
 export const updatePost = async (request: IRequest, response: Response) => {
   const postId = parseInt(request.params.id, 10);
-  const { title, content, published } = request.body;
+  const { title, content } = request.body;
   const userId = request.user.id;
 
   // Get the post to verify ownership
@@ -86,7 +84,6 @@ export const updatePost = async (request: IRequest, response: Response) => {
   const updatedPost = await updatePostQuery(postId, {
     title,
     content,
-    published,
   });
 
   response.json({
