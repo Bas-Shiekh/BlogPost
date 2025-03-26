@@ -22,7 +22,6 @@ interface BlogListProps {
 }
 
 const BlogList = ({ blogs, isLoading, limit }: BlogListProps) => {
-
   // Show skeleton loading state
   if (isLoading) {
     return (
@@ -62,13 +61,16 @@ const BlogList = ({ blogs, isLoading, limit }: BlogListProps) => {
             <CardHeader>
               <div className="flex items-center gap-2">
                 <Avatar className="h-6 w-6">
-                  <AvatarImage
-                    src={blog.author.avatar}
-                    alt={blog.author.name}
-                  />
-                  <AvatarFallback>
-                    {blog.author.name.slice(0, 2)}
-                  </AvatarFallback>
+                  {blog.author.avatar ? (
+                    <AvatarImage
+                      src={blog.author.avatar}
+                      alt={blog.author.name}
+                    />
+                  ) : (
+                    <AvatarFallback>
+                      {blog.author.name.slice(0, 2)}
+                    </AvatarFallback>
+                  )}
                 </Avatar>
                 <span className="text-sm text-muted-foreground">
                   {blog.author.name}
@@ -106,6 +108,6 @@ const BlogList = ({ blogs, isLoading, limit }: BlogListProps) => {
       ))}
     </div>
   );
-}
+};
 
 export default BlogList;

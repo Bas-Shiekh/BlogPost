@@ -28,7 +28,6 @@ export interface PayloadInterface {
 export interface CreatePostInterface {
   title: string;
   content?: string;
-  published?: boolean;
   authorId: number;
 }
 
@@ -40,7 +39,6 @@ export interface IRequest<T = any> extends Request {
 export interface UpdatePostInterface {
   title?: string;
   content?: string;
-  published?: boolean;
 }
 
 export interface PostQuery {
