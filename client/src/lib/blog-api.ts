@@ -1,5 +1,10 @@
 import apiClient from "./api-client";
 import type { Blog } from "./types";
+import type {
+  SearchField,
+  SortField,
+  SortOrder,
+} from "../components/BlogSearchFilter";
 
 export interface CreateBlogData {
   title: string;
@@ -59,13 +64,42 @@ export interface DeleteBlogResponse {
   message: string;
 }
 
+export interface BlogFilters {
+  limit?: number;
+  searchTerm?: string;
+  searchField?: SearchField;
+  sortField?: SortField;
+  sortOrder?: SortOrder;
+}
+
 // Blog API functions
 export const blogApi = {
-  // Get all blog posts
-  getBlogs: async (limit?: number): Promise<Blog[]> => {
+  // Get all blog posts with filtering and sorting
+  getBlogs: async (filters: BlogFilters = {}): Promise<Blog[]> => {
     try {
-      const params = limit ? { limit } : {};
+      console.log("Fetching blogs with filters:", filters);
+
+      // Build query parameters
+      const params: Record<string, string | number> = {};
+
+      if (filters.limit) {
+        params.limit = filters.limit;
+      }
+
+      if (filters.searchTerm) {
+        params.search = filters.searchTerm;
+        if (filters.searchField && filters.searchField !== "all") {
+          params.searchField = filters.searchField;
+        }
+      }
+
+      if (filters.sortField) {
+        params.sortField = filters.sortField;
+        params.sortOrder = filters.sortOrder || "desc";
+      }
+
       const response = await apiClient.get<BlogsResponse>("/posts", { params });
+      console.log("Blogs API response:", response.data);
 
       // Convert the response format to match our Blog type
       const blogs: Blog[] = response.data.data.map((item) => ({
@@ -74,6 +108,7 @@ export const blogApi = {
         content: item.content,
         excerpt: item.content.substring(0, 150) + "...",
         createdAt: item.createdAt,
+        updatedAt: item.updatedAt || item.createdAt,
         author: {
           id: item.author.id.toString(),
           name: item.author.name,
@@ -82,6 +117,7 @@ export const blogApi = {
         commentCount: item.comments?.length || 0,
       }));
 
+      console.log("Processed blogs:", blogs);
       return blogs;
     } catch (error: any) {
       console.error(
@@ -95,6 +131,7 @@ export const blogApi = {
   // Get a specific blog post
   getBlog: async (id: string): Promise<Blog> => {
     try {
+      console.log("Fetching blog with ID:", id);
       const response = await apiClient.get<{
         status: number;
         data: {
@@ -122,6 +159,7 @@ export const blogApi = {
         };
       }>(`/posts/${id}`);
 
+      console.log("Blog API response:", response.data);
       const item = response.data.data;
 
       // Convert the response format to match our Blog type
@@ -131,13 +169,13 @@ export const blogApi = {
         content: item.content,
         excerpt: item.content.substring(0, 150) + "...",
         createdAt: item.createdAt,
+        updatedAt: item.updatedAt || item.createdAt,
         author: {
           id: item.author.id.toString(),
           name: item.author.name,
           avatar: undefined,
         },
         commentCount: item.comments?.length || 0,
-        comments: item.comments
       };
 
       return blog;
@@ -168,6 +206,7 @@ export const blogApi = {
         content: response.data.data.content,
         excerpt: response.data.data.content.substring(0, 150) + "...",
         createdAt: response.data.data.createdAt,
+        updatedAt: response.data.data.updatedAt || response.data.data.createdAt,
         author: {
           id: response.data.data.authorId.toString(),
           name: "", // We'll need to get this from the user context
@@ -207,6 +246,7 @@ export const blogApi = {
         content: response.data.data.content,
         excerpt: response.data.data.content.substring(0, 150) + "...",
         createdAt: response.data.data.createdAt,
+        updatedAt: response.data.data.updatedAt || response.data.data.createdAt,
         author: {
           id: response.data.data.authorId.toString(),
           name: "", // We'll need to get this from the user context

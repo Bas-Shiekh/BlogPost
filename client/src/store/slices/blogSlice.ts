@@ -7,6 +7,7 @@ import {
   blogApi,
   type CreateBlogData,
   type UpdateBlogData,
+  type BlogFilters,
 } from "../../lib/blog-api";
 import type { Blog } from "../../lib/types";
 import { addToast } from "./toastSlice";
@@ -19,6 +20,7 @@ interface BlogState {
   currentBlog: Blog | null;
   isLoading: boolean;
   error: string | null;
+  filters: BlogFilters;
 }
 
 /**
@@ -29,6 +31,10 @@ const initialState: BlogState = {
   currentBlog: null,
   isLoading: false,
   error: null,
+  filters: {
+    sortField: "createdAt",
+    sortOrder: "desc",
+  },
 };
 
 /**
@@ -36,11 +42,21 @@ const initialState: BlogState = {
  */
 export const fetchBlogs = createAsyncThunk(
   "blogs/fetchBlogs",
-  async (limit?: number, { rejectWithValue, dispatch }) => {
+  async (
+    filters: BlogFilters = {},
+    { rejectWithValue, dispatch, getState }
+  ) => {
     try {
-      const blogs = await blogApi.getBlogs(limit);
-      return blogs;
+      // Get current filters from state and merge with new filters
+      const state = getState() as { blogs: BlogState };
+      const mergedFilters = { ...state.blogs.filters, ...filters };
+
+      console.log("Fetching blogs with filters:", mergedFilters);
+      const blogs = await blogApi.getBlogs(mergedFilters);
+      console.log("Fetched blogs:", blogs);
+      return { blogs, filters: mergedFilters };
     } catch (error: any) {
+      console.error("Error fetching blogs:", error);
       dispatch(
         addToast({
           title: "Failed to fetch blogs",
@@ -65,6 +81,7 @@ export const fetchBlog = createAsyncThunk(
   "blogs/fetchBlog",
   async (id: string, { rejectWithValue, dispatch, getState }) => {
     try {
+      console.log("Fetching blog with ID:", id);
 
       // First check if the blog is already in the blogs array
       const state = getState() as { blogs: BlogState };
@@ -73,13 +90,16 @@ export const fetchBlog = createAsyncThunk(
       );
 
       if (existingBlogInList) {
+        console.log("Blog found in existing list, using cached data");
         return existingBlogInList;
       }
 
       // If not in the list, fetch from API
       const blog = await blogApi.getBlog(id);
+      console.log("Fetched blog from API:", blog);
       return blog;
     } catch (error: any) {
+      console.error("Error fetching blog:", error);
       dispatch(
         addToast({
           title: "Failed to fetch blog",
@@ -104,10 +124,12 @@ export const createBlog = createAsyncThunk(
   "blogs/createBlog",
   async (data: CreateBlogData, { rejectWithValue, dispatch, getState }) => {
     try {
+      console.log("Creating blog with data:", data);
       const blog = await blogApi.createBlog({
         ...data,
         published: true,
       });
+      console.log("Blog created successfully:", blog);
 
       // Add author information from auth state
       const state = getState() as { auth: { user: any } };
@@ -124,6 +146,7 @@ export const createBlog = createAsyncThunk(
 
       return blog;
     } catch (error: any) {
+      console.error("Error creating blog:", error);
       dispatch(
         addToast({
           title: "Failed to create blog",
@@ -151,10 +174,12 @@ export const updateBlog = createAsyncThunk(
     { rejectWithValue, dispatch }
   ) => {
     try {
+      console.log("Updating blog with ID:", id, "and data:", data);
       const blog = await blogApi.updateBlog(id, {
         ...data,
         published: true,
       });
+      console.log("Blog updated successfully:", blog);
 
       dispatch(
         addToast({
@@ -165,6 +190,7 @@ export const updateBlog = createAsyncThunk(
 
       return blog;
     } catch (error: any) {
+      console.error("Error updating blog:", error);
       dispatch(
         addToast({
           title: "Failed to update blog",
@@ -189,7 +215,9 @@ export const deleteBlog = createAsyncThunk(
   "blogs/deleteBlog",
   async (id: string, { rejectWithValue, dispatch }) => {
     try {
+      console.log("Deleting blog with ID:", id);
       await blogApi.deleteBlog(id);
+      console.log("Blog deleted successfully");
 
       dispatch(
         addToast({
@@ -234,6 +262,9 @@ const blogSlice = createSlice({
     setCurrentBlog: (state, action: PayloadAction<Blog>) => {
       state.currentBlog = action.payload;
     },
+    setFilters: (state, action: PayloadAction<BlogFilters>) => {
+      state.filters = { ...state.filters, ...action.payload };
+    },
   },
   extraReducers: (builder) => {
     // Fetch Blogs
@@ -243,9 +274,13 @@ const blogSlice = createSlice({
     });
     builder.addCase(
       fetchBlogs.fulfilled,
-      (state, action: PayloadAction<Blog[]>) => {
+      (
+        state,
+        action: PayloadAction<{ blogs: Blog[]; filters: BlogFilters }>
+      ) => {
         state.isLoading = false;
-        state.blogs = action.payload;
+        state.blogs = action.payload.blogs;
+        state.filters = action.payload.filters;
       }
     );
     builder.addCase(fetchBlogs.rejected, (state, action) => {
@@ -351,6 +386,6 @@ const blogSlice = createSlice({
   },
 });
 
-export const { clearBlogError, clearCurrentBlog, setCurrentBlog } =
+export const { clearBlogError, clearCurrentBlog, setCurrentBlog, setFilters } =
   blogSlice.actions;
 export default blogSlice.reducer;
